@@ -302,9 +302,11 @@ void Menu(){
         printf("2. Recorrido(Inorden)\n");
         printf("3. Ordenamiento (Burbuja)\n");
         printf("4. Ordenamiento (Quiksort)\n");
-        printf("5. Tiempos\n");
-        printf("6. Graficar\n");
-        printf("7. Salir del Programa\n");
+        printf("5. Tiempo AVL\n");
+        printf("6. Tiempo BUBBLE\n");
+        printf("7. Tiempo QUICKSORT\n");
+        printf("8. Graficar\n");
+        printf("9. Salir del Programa\n");
         printf("\n****************************************************************\n");
         printf("Eliga una opción a ejecutar: ");
         scanf("%d",&op);
@@ -328,19 +330,39 @@ void Menu(){
             //pendiente
                 break;
             case 5:
+            //avl
                 printf("\nAVL\n");
                 gettimeofday(&inicio, NULL);
                 InOrden(AVL->Raiz);
                 gettimeofday(&fin, NULL);
               float time_arbol = tiempo(&fin, &inicio);
                 printf("\nRecorrido del arbol: %lf segundos\n", time_arbol);
-
                 break;
             case 6:
-               //pendiente
+              //Buble_sort
+                printf("\nBubble_Sort\n");
+                gettimeofday(&inicio, NULL);
+                OrdenamientoBuble_Sort(Buble_Sort);
+                MostrarBuble_Sort(Buble_Sort);
+                gettimeofday(&fin, NULL);
+              float time_buble = tiempo(&fin, &inicio);
+                printf("\nRecorrido del bubble: %lf segundos\n", time_buble);
                 break;
             case 7:
+              //quick
+
+                break;
+            case 8:
+              //Graficar
+
+                break;
+
+            case 9:
                 salir = 4;
+                break;
+
+            default:
+                printf("\nPorfavor ingrese una opcion correcta");
                 break;
         }
     }
