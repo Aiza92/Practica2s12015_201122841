@@ -24,7 +24,7 @@ struct Otronum *Primero;
 }ListaB;
 
 void InsertarBuble_Sort(ListaB *Coso, int num){
-   //referenciadel nodo
+   //referencia del nodo
    Otronum *Nuevo;
     Nuevo = malloc(sizeof(Otronum));
     Nuevo->Siguiente = NULL;
@@ -263,7 +263,7 @@ void InOrden(NodoNumero *Nodo){
     InOrden(Nodo->Derecha);
 }
 
-void Lectura(char* Nombre){
+float Lectura(char* Nombre){
 
     FILE* Archivo=NULL;
     char ReadLine[100];
@@ -272,8 +272,10 @@ void Lectura(char* Nombre){
     if(Archivo==NULL) return -1;
     endFile = fscanf(Archivo," %[^\n]",&ReadLine);
     int n = atoi(ReadLine);
+     gettimeofday(&inicio, NULL);
     AVL->Raiz = Insertar(AVL->Raiz,n);
-    InsertarBuble_Sort(Buble_Sort, n);
+    //InsertarBuble_Sort(Buble_Sort, n);
+  //  InsertarBuble_Sort(Quick_Sort, n);
     Tam_Archivo+=1;
     while(endFile!=EOF){
 
@@ -281,15 +283,52 @@ void Lectura(char* Nombre){
         if(endFile!=EOF){
         int n = atoi(ReadLine);
         AVL->Raiz = Insertar(AVL->Raiz,n);
-        InsertarBuble_Sort(Buble_Sort, n);
+        //InsertarBuble_Sort(Buble_Sort, n);
+       // InsertarBuble_Sort(Quick_Sort, n);
         Tam_Archivo+=1;
         }
     }
+    gettimeofday(&fin, NULL);
+    float time_recorrido = tiempo(&fin, &inicio);
+    printf("\nRecorrido: %lf segundos\n", time_recorrido);
     printf("\nEl archivo a sido cargado con éxito!\n");
     fclose(Archivo);
-
+    return time_recorrido;
 }
 
+int Lectura2(char* Nombre){
+
+    //Tam_Archivo=0
+    FILE* Archivo=NULL;
+    char ReadLine[100];
+    int endFile=0;
+    Archivo = fopen(Nombre,"r");
+    if(Archivo==NULL) return -1;
+    endFile = fscanf(Archivo," %[^\n]",&ReadLine);
+    int n = atoi(ReadLine);
+     //gettimeofday(&inicio, NULL);
+    //AVL->Raiz = Insertar(AVL->Raiz,n);
+    InsertarBuble_Sort(Buble_Sort, n);
+  //  InsertarBuble_Sort(Quick_Sort, n);
+    Tam_Archivo=1;
+    while(endFile!=EOF){
+
+        endFile = fscanf(Archivo," %[^\n]",&ReadLine);
+        if(endFile!=EOF){
+        int n = atoi(ReadLine);
+        //AVL->Raiz = Insertar(AVL->Raiz,n);
+        InsertarBuble_Sort(Buble_Sort, n);
+       // InsertarBuble_Sort(Quick_Sort, n);
+        Tam_Archivo+=1;
+        }
+    }
+    //gettimeofday(&fin, NULL);
+    //float time_recorrido = tiempo(&fin, &inicio);
+    //printf("\nRecorrido: %lf segundos\n", time_recorrido);
+    //printf("\nEl archivo a sido cargado con éxito!\n");
+    fclose(Archivo);
+    return Tam_Archivo;
+}
 
 void Menu(){
     int salir=0;
@@ -310,12 +349,17 @@ void Menu(){
         printf("\n****************************************************************\n");
         printf("Eliga una opción a ejecutar: ");
         scanf("%d",&op);
+        char a_Plotear[80];
+        char pendiente_avl[15];
+        char cant_datos[15];
+
         switch(op){
             case 1:
                 printf("Archivo:\n");
                 fflush(stdin);
                 scanf("%s",&NombreArchivo);
-                Lectura(NombreArchivo);
+                float time_recorrido=Lectura(NombreArchivo);
+                int n = Lectura2(NombreArchivo);
                 break;
             case 2:
                 printf("\nRecorrido del arbol\n");
@@ -353,8 +397,51 @@ void Menu(){
 
                 break;
             case 8:
-              //Graficar
+ // Conversion a char las variables
+   sprintf(pendiente_avl, "%f", time_recorrido);
+   sprintf(cant_datos, "%i", n);
+// comando para "Plotear"
+strcpy(a_Plotear, "gnuplot -p -e \"plot [0:");
+strcat(a_Plotear, pendiente_avl);
+strcat(a_Plotear, "][0:");
+strcat(a_Plotear, cant_datos);
+strcat(a_Plotear, "] ");
+strcat(a_Plotear, cant_datos);
+strcat(a_Plotear, "*x/");
+strcat(a_Plotear, pendiente_avl);
+strcat(a_Plotear, " title 'Grafica de inserccion AVL'\"");
+system(a_Plotear);
+printf( "\nGráfica de la inserción del AVL:\n");
+getchar();
 
+//InOrden
+char a_Plotear2[80];
+char pendiente_inorden[15];
+sprintf(pendiente_inorden, "%f", time_arbol);
+strcpy(a_Plotear2, "gnuplot -p -e \"plot [0:");
+strcat(a_Plotear2, pendiente_inorden);
+strcat(a_Plotear2, "][0:");
+strcat(a_Plotear2, "50");
+strcat(a_Plotear2, "] ");
+strcat(a_Plotear2, "50");
+strcat(a_Plotear2, "*x/");
+strcat(a_Plotear2, pendiente_inorden);
+strcat(a_Plotear, " title 'Grafica de InOrden'\"");
+system(a_Plotear2);
+//burbuja
+char a_Plotear3[80];
+char pendiente_bubble[15];
+sprintf(pendiente_bubble, "%f", time_buble);
+strcpy(a_Plotear3, "gnuplot -p -e \"plot [0:");
+strcat(a_Plotear3, pendiente_bubble);
+strcat(a_Plotear3, "][0:");
+strcat(a_Plotear3, cant_datos);
+strcat(a_Plotear3, "] ");
+strcat(a_Plotear3, cant_datos);
+strcat(a_Plotear3, "*x/");
+strcat(a_Plotear3, pendiente_bubble);
+strcat(a_Plotear, " title 'Grafica de Bubble'\"");
+system(a_Plotear3);
                 break;
 
             case 9:
@@ -373,7 +460,9 @@ int main()
 {
     AVL =malloc(sizeof(Arbol));
     Buble_Sort = malloc(sizeof(ListaB));
+//    Quick_Sort= malloc(sizeof)(ListaB));
     Menu();
+
 
     return 0;
 }
