@@ -453,8 +453,11 @@ void Menu(){
         printf("5. Tiempo AVL\n");
         printf("6. Tiempo BUBBLE\n");
         printf("7. Tiempo QUICKSORT\n");
-        printf("8. Graficar\n");
-        printf("9. Salir del Programa\n");
+        printf("8. Graficar Arbol\n");
+        printf("9. Graficar Avl\n");
+        printf("10. Graficar Bubble\n");
+        printf("11. Graficar Quick\n");
+        printf("12. Salir del Programa\n");
         printf("\n****************************************************************\n");
         printf("Eliga una opción a ejecutar: ");
         scanf("%d",&op);
@@ -462,6 +465,14 @@ void Menu(){
         char pendiente_avl[15];
         char cant_datos[15];
 
+char a_Plotear2[80];
+char pendiente_inorden[15];
+
+char a_Plotear3[80];
+char pendiente_bubble[15];
+
+char a_Plotear4[80];
+char pendiente_quick[15];
         switch(op){
             case 1:
                 printf("Archivo:\n");
@@ -485,7 +496,6 @@ void Menu(){
                 qs(Quick_Sort,0,Tam_Archivo);
                 printf("\nSi ordena\n");
                 MostrarQuick_Sort(Quick_Sort);
-
 
                 break;
             case 5:
@@ -512,7 +522,7 @@ void Menu(){
                 printf("\nQuick_Sort\n");
                 gettimeofday(&inicio, NULL);
 
-                qs(Quick_Sort,0,cant_datos);
+                qs(Quick_Sort,0,Tam_Archivo);
                 MostrarQuick_Sort(Quick_Sort);
 
                 gettimeofday(&fin, NULL);
@@ -534,14 +544,17 @@ strcat(a_Plotear, "] ");
 strcat(a_Plotear, cant_datos);
 strcat(a_Plotear, "*x/");
 strcat(a_Plotear, pendiente_avl);
-strcat(a_Plotear, " title 'Grafica de inserccion AVL'\"");
+//strcat(a_Plotear, " title 'Grafica de inserccion AVL'\"");
+strcat(a_Plotear, "\"");
 system(a_Plotear);
 //printf( "\nGráfica de la inserción del AVL:\n");
 getchar();
+break;
 
+case 9:
 //InOrden
-char a_Plotear2[80];
-char pendiente_inorden[15];
+//char a_Plotear2[80];
+//char pendiente_inorden[15];
 sprintf(pendiente_inorden, "%f", time_arbol);
 strcpy(a_Plotear2, "gnuplot -p -e \"plot [0:");
 strcat(a_Plotear2, pendiente_inorden);
@@ -551,11 +564,15 @@ strcat(a_Plotear2, "] ");
 strcat(a_Plotear2, cant_datos);
 strcat(a_Plotear2, "*x/");
 strcat(a_Plotear2, pendiente_inorden);
-strcat(a_Plotear2, " title 'Grafica de InOrden'\"");
+strcat(a_Plotear2, "\"");
 system(a_Plotear2);
+
+break;
+
+case 10:
 //burbuja
-char a_Plotear3[80];
-char pendiente_bubble[15];
+//char a_Plotear3[80];
+//char pendiente_bubble[15];
 sprintf(pendiente_bubble, "%f", time_buble);
 strcpy(a_Plotear3, "gnuplot -p -e \"plot [0:");
 strcat(a_Plotear3, pendiente_bubble);
@@ -565,11 +582,13 @@ strcat(a_Plotear3, "] ");
 strcat(a_Plotear3, cant_datos);
 strcat(a_Plotear3, "*x/");
 strcat(a_Plotear3, pendiente_bubble);
-strcat(a_Plotear3, " title 'Grafica de Bubble'\"");
+strcat(a_Plotear3, "\"");
 system(a_Plotear3);
+break;
+case 11:
 //quick
-char a_Plotear4[80];
-char pendiente_quick[15];
+//char a_Plotear4[80];
+//char pendiente_quick[15];
 sprintf(pendiente_quick, "%f", time_quick);
 strcpy(a_Plotear4, "gnuplot -p -e \"plot [0:");
 strcat(a_Plotear4, pendiente_quick);
@@ -579,11 +598,11 @@ strcat(a_Plotear4, "] ");
 strcat(a_Plotear4, cant_datos);
 strcat(a_Plotear4, "*x/");
 strcat(a_Plotear4, pendiente_quick);
-strcat(a_Plotear4, " title 'Grafica de Quick'\"");
+strcat(a_Plotear4, "\"");
 system(a_Plotear4);
                 break;
 
-            case 9:
+            case 12:
                 salir = 4;
                 break;
 
