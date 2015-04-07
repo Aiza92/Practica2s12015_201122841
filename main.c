@@ -55,6 +55,7 @@ void MostrarBuble_Sort(ListaB *OtroCoso){
 
 
 }
+
 //Ordenamiento burbuja
 
 int Tam_Archivo=0;
@@ -83,6 +84,82 @@ NodoBuble=ListaBuble->Primero;
     }
 }
 
+//quick
+
+Otronum *Buscar(ListaB *LQ,int num){
+    int indice = 0;
+    Otronum *auxiliar = LQ->Primero;
+    Otronum *retorno_nodo;
+    while(auxiliar!=NULL){
+        if(indice==num){
+            retorno_nodo = auxiliar;
+            auxiliar = NULL;
+        }else{
+            ++indice;
+            auxiliar = auxiliar->Siguiente;
+        }
+    }
+    return retorno_nodo;
+}
+
+int Cambios(ListaB *LQ, int inicio, int fin) {
+    int lim_izq;
+    int lim_der;
+    int pivote;
+    int temp;
+    Otronum *aux_izq;
+    Otronum *aux_der;
+    Otronum *comienzo_nodo = Buscar(LQ,inicio);
+    pivote = Buscar(LQ,inicio)->Num;
+    lim_izq = inicio;
+    lim_der = fin;
+
+    while (lim_izq < lim_der) {
+        while (Buscar(LQ,lim_der)->Num > pivote) {
+            lim_der--;
+        }
+        aux_der = Buscar(LQ,lim_der);
+        while ((lim_izq < lim_der) && (Buscar(LQ,lim_izq)->Num <= pivote)) {
+            lim_izq++;
+        }
+        aux_izq = Buscar(LQ,lim_izq);
+        if (lim_izq < lim_der) {
+            temp = aux_izq->Num;
+            aux_der->Num = aux_izq->Num;
+            aux_izq->Num = temp;
+        }
+    }
+
+    temp = aux_der->Num;
+    aux_der->Num = comienzo_nodo->Num;
+    comienzo_nodo->Num = temp;
+
+    return lim_der;
+}
+
+void qs(ListaB *LQ, int inicio, int fin){ // Ordenando los datos de la lista
+    int pivote;
+    if (inicio < fin) {
+        pivote = Cambios(LQ, inicio, fin);
+        qs(LQ, inicio, pivote - 1); // menor
+        qs(LQ, pivote + 1, fin);// mayor
+    }
+}
+
+//mostrar quick
+void MostrarQuick_Sort(ListaB *OtroCoso){
+
+    Otronum *NodoAux;
+    NodoAux= OtroCoso->Primero;
+
+    while(NodoAux!=NULL){
+        printf("%d ",NodoAux->Num);
+        NodoAux = NodoAux->Siguiente;
+    }
+
+
+}
+
 //Nodo avl
 typedef struct NodoNumero{
     int num;
@@ -96,6 +173,7 @@ typedef struct Arbol {
 }Arbol;
 
 ListaB *Buble_Sort;
+ListaB *Quick_Sort;
 Arbol *AVL;
 
 
@@ -309,7 +387,7 @@ int Lectura2(char* Nombre){
      //gettimeofday(&inicio, NULL);
     //AVL->Raiz = Insertar(AVL->Raiz,n);
     InsertarBuble_Sort(Buble_Sort, n);
-  //  InsertarBuble_Sort(Quick_Sort, n);
+    InsertarBuble_Sort(Quick_Sort, n);
     Tam_Archivo=1;
     while(endFile!=EOF){
 
@@ -318,7 +396,7 @@ int Lectura2(char* Nombre){
         int n = atoi(ReadLine);
         //AVL->Raiz = Insertar(AVL->Raiz,n);
         InsertarBuble_Sort(Buble_Sort, n);
-       // InsertarBuble_Sort(Quick_Sort, n);
+        InsertarBuble_Sort(Quick_Sort, n);
         Tam_Archivo+=1;
         }
     }
@@ -372,6 +450,10 @@ void Menu(){
                 break;
             case 4:
             //pendiente
+                printf("\nOrdenamiento de quick\n");
+                qs(Quick_Sort,0,cant_datos);
+                MostrarBuble_Sort(Quick_Sort);
+
                 break;
             case 5:
             //avl
@@ -394,8 +476,18 @@ void Menu(){
                 break;
             case 7:
               //quick
+                printf("\nQuick_Sort\n");
+                gettimeofday(&inicio, NULL);
 
+                qs(Quick_Sort,0,cant_datos);
+                MostrarBuble_Sort(Quick_Sort);
+
+                gettimeofday(&fin, NULL);
+                float time_quick = tiempo(&fin, &inicio);
+                printf("\nRecorrido del quick: %lf segundos\n", time_quick);
                 break;
+
+
             case 8:
  // Conversion a char las variables
    sprintf(pendiente_avl, "%f", time_recorrido);
@@ -411,7 +503,7 @@ strcat(a_Plotear, "*x/");
 strcat(a_Plotear, pendiente_avl);
 strcat(a_Plotear, " title 'Grafica de inserccion AVL'\"");
 system(a_Plotear);
-printf( "\nGráfica de la inserción del AVL:\n");
+//printf( "\nGráfica de la inserción del AVL:\n");
 getchar();
 
 //InOrden
@@ -442,6 +534,20 @@ strcat(a_Plotear3, "*x/");
 strcat(a_Plotear3, pendiente_bubble);
 strcat(a_Plotear, " title 'Grafica de Bubble'\"");
 system(a_Plotear3);
+//quick
+char a_Plotear4[80];
+char pendiente_quick[15];
+sprintf(pendiente_quick, "%f", time_quick);
+strcpy(a_Plotear4, "gnuplot -p -e \"plot [0:");
+strcat(a_Plotear4, pendiente_quick);
+strcat(a_Plotear4, "][0:");
+strcat(a_Plotear4, cant_datos);
+strcat(a_Plotear4, "] ");
+strcat(a_Plotear4, cant_datos);
+strcat(a_Plotear4, "*x/");
+strcat(a_Plotear4, pendiente_quick);
+strcat(a_Plotear, " title 'Grafica de Quick'\"");
+system(a_Plotear4);
                 break;
 
             case 9:
@@ -460,7 +566,8 @@ int main()
 {
     AVL =malloc(sizeof(Arbol));
     Buble_Sort = malloc(sizeof(ListaB));
-//    Quick_Sort= malloc(sizeof)(ListaB));
+    Quick_Sort= malloc(sizeof(ListaB));
+
     Menu();
 
 
