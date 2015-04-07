@@ -17,11 +17,19 @@ typedef struct Otronum{
     int Num;
     struct Otronum *Siguiente;
 }Otronum;
+typedef struct Otronum2{
+    int Num;
+    struct Otronum2 *Siguiente;
+}Otronum2;
 //metodo burbuja
 typedef struct ListaB{
 //struct ListaB *Buble_Sort;
 struct Otronum *Primero;
 }ListaB;
+
+typedef struct ListaQu{
+struct Otronum2 *Primero;
+}ListaQu;
 
 void InsertarBuble_Sort(ListaB *Coso, int num){
    //referencia del nodo
@@ -42,7 +50,29 @@ void InsertarBuble_Sort(ListaB *Coso, int num){
         NodoAux->Siguiente = Nuevo;
         NodoAux = Nuevo;
     }
-}//mostrar burbuja
+}//mostrar quick
+void InsertarQuick_Sort(ListaQu *Coso, int num){
+   //referencia del nodo
+   Otronum2 *Nuevo;
+    Nuevo = malloc(sizeof(Otronum2));
+    Nuevo->Siguiente = NULL;
+    Nuevo->Num = num;
+//lista vacia
+    if(Coso->Primero==NULL){
+        Coso->Primero = Nuevo;
+    }else{
+        Otronum2 *NodoAux;
+        NodoAux = Coso->Primero;
+
+        while(NodoAux->Siguiente!=NULL){
+            NodoAux = NodoAux->Siguiente;
+        }
+        NodoAux->Siguiente = Nuevo;
+        NodoAux = Nuevo;
+    }
+}
+//mostrar burbuja
+
 void MostrarBuble_Sort(ListaB *OtroCoso){
 
     Otronum *NodoAux;
@@ -55,7 +85,18 @@ void MostrarBuble_Sort(ListaB *OtroCoso){
 
 
 }
+//mostrar quick
 
+void MostrarQuick_Sort(ListaQu *OtroCoso){
+
+    Otronum2 *NodoAux;
+    NodoAux= OtroCoso->Primero;
+
+    while(NodoAux!=NULL){
+        printf("%d ",NodoAux->Num);
+        NodoAux = NodoAux->Siguiente;
+    }
+}
 //Ordenamiento burbuja
 
 int Tam_Archivo=0;
@@ -86,10 +127,10 @@ NodoBuble=ListaBuble->Primero;
 
 //quick
 
-Otronum *Buscar(ListaB *LQ,int num){
+Otronum2 *Buscar(ListaQu *LQ,int num){
     int indice = 0;
-    Otronum *auxiliar = LQ->Primero;
-    Otronum *retorno_nodo;
+    Otronum2 *auxiliar = LQ->Primero;
+    Otronum2 *retorno_nodo;
     while(auxiliar!=NULL){
         if(indice==num){
             retorno_nodo = auxiliar;
@@ -102,14 +143,14 @@ Otronum *Buscar(ListaB *LQ,int num){
     return retorno_nodo;
 }
 
-int Cambios(ListaB *LQ, int inicio, int fin) {
+int Cambios(ListaQu *LQ, int inicio, int fin) {
     int lim_izq;
     int lim_der;
     int pivote;
     int temp;
-    Otronum *aux_izq;
-    Otronum *aux_der;
-    Otronum *comienzo_nodo = Buscar(LQ,inicio);
+    Otronum2 *aux_izq;
+    Otronum2 *aux_der;
+    Otronum2 *comienzo_nodo = Buscar(LQ,inicio);
     pivote = Buscar(LQ,inicio)->Num;
     lim_izq = inicio;
     lim_der = fin;
@@ -125,8 +166,8 @@ int Cambios(ListaB *LQ, int inicio, int fin) {
         aux_izq = Buscar(LQ,lim_izq);
         if (lim_izq < lim_der) {
             temp = aux_izq->Num;
-            aux_der->Num = aux_izq->Num;
-            aux_izq->Num = temp;
+            aux_izq->Num = aux_der->Num;
+            aux_der->Num = temp;
         }
     }
 
@@ -137,7 +178,7 @@ int Cambios(ListaB *LQ, int inicio, int fin) {
     return lim_der;
 }
 
-void qs(ListaB *LQ, int inicio, int fin){ // Ordenando los datos de la lista
+void qs(ListaQu *LQ, int inicio, int fin){ // Ordenando los datos de la lista
     int pivote;
     if (inicio < fin) {
         pivote = Cambios(LQ, inicio, fin);
@@ -146,19 +187,9 @@ void qs(ListaB *LQ, int inicio, int fin){ // Ordenando los datos de la lista
     }
 }
 
-//mostrar quick
-void MostrarQuick_Sort(ListaB *OtroCoso){
-
-    Otronum *NodoAux;
-    NodoAux= OtroCoso->Primero;
-
-    while(NodoAux!=NULL){
-        printf("%d ",NodoAux->Num);
-        NodoAux = NodoAux->Siguiente;
-    }
 
 
-}
+
 
 //Nodo avl
 typedef struct NodoNumero{
@@ -173,7 +204,7 @@ typedef struct Arbol {
 }Arbol;
 
 ListaB *Buble_Sort;
-ListaB *Quick_Sort;
+ListaQu *Quick_Sort;
 Arbol *AVL;
 
 
@@ -387,7 +418,7 @@ int Lectura2(char* Nombre){
      //gettimeofday(&inicio, NULL);
     //AVL->Raiz = Insertar(AVL->Raiz,n);
     InsertarBuble_Sort(Buble_Sort, n);
-    InsertarBuble_Sort(Quick_Sort, n);
+    InsertarQuick_Sort(Quick_Sort, n);
     Tam_Archivo=1;
     while(endFile!=EOF){
 
@@ -396,7 +427,7 @@ int Lectura2(char* Nombre){
         int n = atoi(ReadLine);
         //AVL->Raiz = Insertar(AVL->Raiz,n);
         InsertarBuble_Sort(Buble_Sort, n);
-        InsertarBuble_Sort(Quick_Sort, n);
+        InsertarQuick_Sort(Quick_Sort, n);
         Tam_Archivo+=1;
         }
     }
@@ -451,8 +482,10 @@ void Menu(){
             case 4:
             //pendiente
                 printf("\nOrdenamiento de quick\n");
-                qs(Quick_Sort,0,cant_datos);
-                MostrarBuble_Sort(Quick_Sort);
+                qs(Quick_Sort,0,Tam_Archivo);
+                printf("\nSi ordena\n");
+                MostrarQuick_Sort(Quick_Sort);
+
 
                 break;
             case 5:
@@ -480,7 +513,7 @@ void Menu(){
                 gettimeofday(&inicio, NULL);
 
                 qs(Quick_Sort,0,cant_datos);
-                MostrarBuble_Sort(Quick_Sort);
+                MostrarQuick_Sort(Quick_Sort);
 
                 gettimeofday(&fin, NULL);
                 float time_quick = tiempo(&fin, &inicio);
@@ -566,7 +599,7 @@ int main()
 {
     AVL =malloc(sizeof(Arbol));
     Buble_Sort = malloc(sizeof(ListaB));
-    Quick_Sort= malloc(sizeof(ListaB));
+    Quick_Sort= malloc(sizeof(ListaQu));
 
     Menu();
 
