@@ -518,7 +518,7 @@ strcat(a_Plotear2, "] ");
 strcat(a_Plotear2, cant_datos);
 strcat(a_Plotear2, "*x/");
 strcat(a_Plotear2, pendiente_inorden);
-strcat(a_Plotear, " title 'Grafica de InOrden'\"");
+strcat(a_Plotear2, " title 'Grafica de InOrden'\"");
 system(a_Plotear2);
 //burbuja
 char a_Plotear3[80];
@@ -532,7 +532,7 @@ strcat(a_Plotear3, "] ");
 strcat(a_Plotear3, cant_datos);
 strcat(a_Plotear3, "*x/");
 strcat(a_Plotear3, pendiente_bubble);
-strcat(a_Plotear, " title 'Grafica de Bubble'\"");
+strcat(a_Plotear3, " title 'Grafica de Bubble'\"");
 system(a_Plotear3);
 //quick
 char a_Plotear4[80];
@@ -546,7 +546,7 @@ strcat(a_Plotear4, "] ");
 strcat(a_Plotear4, cant_datos);
 strcat(a_Plotear4, "*x/");
 strcat(a_Plotear4, pendiente_quick);
-strcat(a_Plotear, " title 'Grafica de Quick'\"");
+strcat(a_Plotear4, " title 'Grafica de Quick'\"");
 system(a_Plotear4);
                 break;
 
